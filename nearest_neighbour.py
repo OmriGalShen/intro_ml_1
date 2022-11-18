@@ -48,7 +48,7 @@ def predictknn(classifier, x_test: np.array):
 
 
 def simple_test():
-    data = np.load('mnist_all_not_compressed.npz')
+    data = np.load('mnist_all.npz')
 
     train0 = data['train0']
     train1 = data['train1']
