@@ -22,7 +22,3 @@ def gensmallm(x_list: list, y_list: list, m: int):
     rearranged_y = y[indices]
 
     return rearranged_x[:m], rearranged_y[:m]
-
-
-class Classifier:
-    pass

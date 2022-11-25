@@ -1,7 +1,21 @@
+from typing import List
+
 import numpy as np
 from scipy.spatial import distance
 
-from utils import gensmallm, Classifier
+from utils import gensmallm
+
+
+class Classifier:
+    def __init__(self, k: int, x_train: np.array, y_train: np.array):
+        self.k = k
+        self.dataset: List[DataPoint] = [DataPoint(*x_y_train) for x_y_train in zip(x_train, y_train)]
+
+
+class DataPoint:
+    def __init__(self, x: np.array, label: float):
+        self.x = x
+        self.label = label
 
 
 def learnknn(k: int, x_train: np.array, y_train: np.array) -> Classifier:
@@ -12,7 +26,7 @@ def learnknn(k: int, x_train: np.array, y_train: np.array) -> Classifier:
     :param y_train: numpy array of size (m, 1) containing the labels of the training sample
     :return: classifier data structure
     """
-    raise NotImplementedError()
+    return Classifier(k, x_train, y_train)
 
 
 def predictknn(classifier: Classifier, x_test: np.array) -> np.array:
@@ -22,7 +36,26 @@ def predictknn(classifier: Classifier, x_test: np.array) -> np.array:
     :param x_test: numpy array of size (n, d) containing test examples that will be classified
     :return: numpy array of size (n, 1) classifying the examples in x_test
     """
-    raise NotImplementedError()
+    # apply classification for each example
+    result_apply_classification = np.apply_along_axis(classify, 1, x_test, classifier)
+    # fix shape from (n,) -> (n,1)
+    result_fix_shape = np.expand_dims(result_apply_classification, axis=1)
+    return result_fix_shape
+
+
+def classify(x: np.array, classifier: Classifier) -> np.float:
+    """
+    :param classifier: data structure returned from the function learnknn
+    :param x: numpy array of size (d, 1) containing test example that will be classified
+    :return: classification (0,1)
+    """
+    k: int = classifier.k
+    dataset: List[DataPoint] = classifier.dataset
+    nearest_neighbors = sorted(dataset, key=lambda data_point: distance.euclidean(x, data_point.x))
+    k_nearest_neighbors = nearest_neighbors[:k]
+    k_nearest_neighbors_labels = [neighbor.label for neighbor in k_nearest_neighbors]
+    majority_vote_label = max(k_nearest_neighbors_labels)
+    return majority_vote_label
 
 
 def simple_test():
