@@ -58,6 +58,16 @@ def classify(x: np.array, classifier: Classifier) -> np.float:
     return majority_vote_label
 
 
+def sanity_test():
+    k = 1
+    x_train = np.array([[1, 2], [3, 4], [5, 6]])
+    y_train = np.array([1, 0, 1])
+    classifier = learnknn(k, x_train, y_train)
+    x_test = np.array([[10, 11], [3.1, 4.2], [2.9, 4.2], [5, 6]])
+    y_testprediction = predictknn(classifier, x_test)
+    assert (y_testprediction == np.array([[1], [0], [0], [1]])).all()
+
+
 def simple_test():
     data = np.load('mnist_all.npz')
 
@@ -93,4 +103,5 @@ def simple_test():
 
 if __name__ == '__main__':
     # before submitting, make sure that the function simple_test runs without errors
+    sanity_test()
     simple_test()
