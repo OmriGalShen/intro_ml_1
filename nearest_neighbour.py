@@ -41,12 +41,10 @@ def classify(x: np.array, classifier: Classifier) -> np.float:
     :param x: numpy array of size (d, 1) containing test example that will be classified
     :return: classification 0-9
     """
-    k: int = classifier.k
-    examples: np.array = classifier.examples
-    nearest_neighbors = sorted(examples, key=lambda example: distance.euclidean(x, example[0]))
-    k_nearest_neighbors = nearest_neighbors[:k]
+    nearest_neighbors = sorted(classifier.examples, key=lambda example: distance.euclidean(x, example[0]))
+    k_nearest_neighbors = nearest_neighbors[:classifier.k]
     k_nearest_neighbors_labels = [neighbor[1] for neighbor in k_nearest_neighbors]
-    majority_vote_label = max(k_nearest_neighbors_labels)
+    majority_vote_label = max(k_nearest_neighbors_labels, key=k_nearest_neighbors_labels.count)
     return majority_vote_label
 
 
