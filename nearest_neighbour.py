@@ -58,6 +58,7 @@ def sanity_test():
     x_test = np.array([[10, 11], [3.1, 4.2], [2.9, 4.2], [5, 6]])
     y_testprediction = predictknn(classifier, x_test)
     assert (y_testprediction == np.array([[1], [0], [0], [1]])).all()
+    print("passed sanity test")
 
 
 def simple_test():

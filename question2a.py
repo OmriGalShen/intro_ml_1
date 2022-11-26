@@ -7,9 +7,9 @@ from utils import gensmallm
 LABELS = [2, 3, 5, 6]
 
 
-def question_2_part_a(k, sample_sizes_steps):
+def question_2_part_a(k, sample_size_max, sample_sizes_steps):
     data = np.load('mnist_all.npz')
-    train_sample_sizes = np.linspace(1, 100, num=sample_sizes_steps, dtype=int)
+    train_sample_sizes = np.linspace(1, sample_size_max, num=sample_sizes_steps, dtype=int)
     repeats = 10
 
     avg_errors, min_errors, max_errors = [], [], []
@@ -40,12 +40,9 @@ def calculate_error(data, k: int, train_sample_size: int) -> float:
     x_test, y_test = gensmallm(test_data, LABELS, test_size)
 
     classifer = learnknn(k, x_train, y_train)
-
     preds = predictknn(classifer, x_test)
-
     # fix shape from (n,) -> (n,1)
     y_test = np.expand_dims(y_test, axis=1)
-
     return float(np.mean(y_test != preds))
 
 
@@ -60,4 +57,4 @@ def show_results(x_axis, y_axis, repeats: int, k: int, error_bar):
 
 if __name__ == '__main__':
     # before submitting, make sure that the function simple_test runs without errors
-    question_2_part_a(k=1, sample_sizes_steps=10)
+    question_2_part_a(k=1, sample_size_max=100, sample_sizes_steps=10)
